@@ -33,7 +33,7 @@ export const FILM_SLUGS = [
   'rogue-one',
 ] as const;
 
-// Character slugs from MVP data (sample)
+// Character slugs from MVP data
 export const CHARACTER_SLUGS = [
   'luke-skywalker',
   'leia-organa',
@@ -42,8 +42,8 @@ export const CHARACTER_SLUGS = [
   'yoda',
   'obi-wan-kenobi',
   'anakin-skywalker',
-  'padmeamidala',
-  ' Chewbacca',
+  'padme-amidala',
+  'chewbacca',
   'lando-calrissian',
   'boba-fett',
   'jabba-the-hutt',
@@ -62,20 +62,16 @@ export const CHARACTER_SLUGS = [
   'general-hux',
   'captain-phasma',
   'ahsoka-tano',
-  'darh-vader',
   'maul',
   'jango-fett',
 ] as const;
 
 // Beyond-film slugs
 export const BEYOND_FILM_SLUGS = [
-  'the-clone-wars',
-  'rebbels',
-  'the-mandalorian',
-  'the-book-of-boba-fett',
-  'andor',
-  'obi-wan-kenobi-series',
-  'ahsoka-series',
+  'ahsoka-tano',
+  'mara-jade',
+  'revan',
+  'doctor-aphra',
 ] as const;
 
 /**
@@ -108,7 +104,6 @@ export function getFilmImageUrl(
   type: 'poster' | 'backdrop' | 'thumbnail' = 'poster'
 ): string {
   const localPath = getFilmAssetPath(slug, type);
-  // Return local path - Next.js will handle 404 fallback
   return localPath;
 }
 
