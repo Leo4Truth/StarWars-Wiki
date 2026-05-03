@@ -1,97 +1,481 @@
 openapi: 3.1.0
 info:
   title: StarWars Wiki MVP API
-  version: 1.0.0
-servers:
-  - url: https://api.example.com
+  version: 1.1.0
+  description: |
+    Star Wars Wiki API Contract - MVP Phase
+    Base path: /api/v1
+  servers:
+    - url: http://localhost:8000/api/v1
+
+common:
+  parameters:
+    locale:
+      in: query
+      name: locale
+      required: true
+      schema:
+        type: string
+        enum: [zh-CN, en-US]
+      description: Language preference
+
 paths:
-  /api/v1/home/film-timeline:
+
+  /home/film-timeline:
     get:
       summary: 首页电影时间线
+      description: Returns film entries sorted by timeline order (BBY/ABY). Supports era filtering.
       parameters:
-        - in: query
-          name: locale
-          required: true
-          schema: { type: string, enum: [zh-CN, en-US] }
+        - $ref: '#/common/parameters/locale'
         - in: query
           name: era
           required: false
-          schema: { type: string, enum: [prequel, original, sequel, anthology, all], default: all }
+          schema:
+            type: string
+            enum: [prequel, original, sequel, anthology, all]
+            default: all
+          description: Filter by film era
       responses:
         '200':
-          description: ok
+          description: Film timeline list
           content:
             application/json:
               schema:
                 type: object
+                required: [locale, items]
                 properties:
+                  locale:
+                    type: string
+                    enum: [zh-CN, en-US]
                   items:
                     type: array
                     items:
                       type: object
-                      required: [film_id, slug, title, timeline_sort_key]
+                      required: [canonical_id, slug, title, timeline_sort_key]
                       properties:
-                        film_id: { type: string }
-                        slug: { type: string }
-                        title: { type: string }
-                        era: { type: string }
-                        bby_aby_label: { type: string }
-                        release_date: { type: string, format: date }
-                        timeline_sort_key: { type: number }
-                        hover_summary: { type: string }
-  /api/v1/home/beyond-films:
+                        canonical_id:
+                          type: string
+                          description: Stable entity identifier (e.g., "film_ep1")
+                          example: film_ep1
+                        slug:
+                          type: string
+                          description: URL-friendly identifier
+                          example: episode-i-the-phantom-menace
+                        title:
+                          type: string
+                          description: Localized film title
+                          example: 星球大战前传一：幽灵的威胁
+                        title_en:
+                          type: string
+                          description: English title
+                          example: Star Wars: Episode I – The Phantom Menace
+                        release_date:
+                          type: string
+                          format: date
+                          description: Release date (YYYY-MM-DD)
+                          example: "1999-05-19"
+                        era:
+                          type: string
+                          enum: [prequel, original, sequel, anthology]
+                          description: Film era classification
+                        bby_aby_label:
+                          type: string
+                          description: Human-readable timeline position
+                          example: "32 BBY"
+                        bby_aby_numeric:
+                          type: number
+                          description: Numeric timeline position for sorting
+                        timeline_sort_key:
+                          type: number
+                          description: Sort key for timeline ordering
+                        synopsis_zh:
+                          type: string
+                          description: Chinese synopsis
+                        synopsis_en:
+                          type: string
+                          description: English synopsis
+                        hero_characters:
+                          type: array
+                          description: Key characters for hover preview
+                          items:
+                            type: object
+                            properties:
+                              slug:
+                                type: string
+                                example: qui-gon-jinn
+                              name:
+                                type: string
+                                example: 魁刚·金
+                        hover_summary:
+                          type: string
+                          description: Short description for film card hover (50-100 chars)
+                          example: 年轻绝地学徒欧比旺与其师父魁刚·金前往纳布星...
+
+  /home/beyond-films:
     get:
       summary: 首页电影外角色入口
+      description: Returns non-film character entries (animation, novel, comic, game origins)
       parameters:
-        - in: query
-          name: locale
-          required: true
-          schema: { type: string, enum: [zh-CN, en-US] }
+        - $ref: '#/common/parameters/locale'
         - in: query
           name: type
           required: false
-          schema: { type: string, enum: [novel, comic, animation, game, all], default: all }
+          schema:
+            type: string
+            enum: [animation, novel, comic, game, all]
+            default: all
+          description: Filter by origin work type
       responses:
         '200':
-          description: ok
-  /api/v1/films/{slug}:
+          description: Beyond films character list
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [locale, items]
+                properties:
+                  locale:
+                    type: string
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      required: [canonical_id, slug, name]
+                      properties:
+                        canonical_id:
+                          type: string
+                          example: char_ahsoka
+                        slug:
+                          type: string
+                          example: ahsoka-tano
+                        name:
+                          type: string
+                          example: 阿索卡·塔诺
+                        name_en:
+                          type: string
+                          example: Ahsoka Tano
+                        origin_type:
+                          type: string
+                          enum: [animation, novel, comic, game]
+                          example: animation
+                        origin_work_title:
+                          type: string
+                          example: 星球大战：克隆人战争 2008
+                        bby_aby_label:
+                          type: string
+                          example: "36 BBY"
+                        bby_aby_numeric:
+                          type: number
+                        movie_linkage:
+                          type: string
+                          description: Canonical ID of linked film
+                          example: film_ep3
+                        movie_linkage_label:
+                          type: string
+                          example: 西斯的复仇
+                        bio_summary:
+                          type: string
+                          description: Short bio for card display
+                        detail_url:
+                          type: string
+                          description: URL to character detail page
+                          example: /zh-CN/characters/ahsoka-tano
+
+  /films/{slug}:
     get:
       summary: 电影详情
       parameters:
         - in: path
           name: slug
           required: true
-          schema: { type: string }
-        - in: query
-          name: locale
-          required: true
-          schema: { type: string, enum: [zh-CN, en-US] }
+          schema:
+            type: string
+          example: episode-i-the-phantom-menace
+        - $ref: '#/common/parameters/locale'
       responses:
-        '200': { description: ok }
-  /api/v1/characters/{slug}:
+        '200':
+          description: Film detail
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [locale, film, display_title]
+                properties:
+                  locale:
+                    type: string
+                  film:
+                    type: object
+                    properties:
+                      canonical_id:
+                        type: string
+                        example: film_ep1
+                      slug:
+                        type: string
+                      title:
+                        type: string
+                      title_en:
+                        type: string
+                      release_date:
+                        type: string
+                        format: date
+                      era:
+                        type: string
+                      bby_aby_label:
+                        type: string
+                      bby_aby_numeric:
+                        type: number
+                      timeline_sort_key:
+                        type: number
+                      synopsis_zh:
+                        type: string
+                      synopsis_en:
+                        type: string
+                      director_zh:
+                        type: string
+                      director_en:
+                        type: string
+                      source_url:
+                        type: string
+                        format: uri
+                  display_title:
+                    type: string
+        '404':
+          description: Film not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /characters:
+    get:
+      summary: 人物列表
+      parameters:
+        - $ref: '#/common/parameters/locale'
+        - in: query
+          name: faction
+          required: false
+          schema:
+            type: string
+          description: Filter by faction
+        - in: query
+          name: era
+          required: false
+          schema:
+            type: string
+          description: Filter by first appearance era
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - in: query
+          name: offset
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: Character list with pagination
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  locale:
+                    type: string
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        canonical_id:
+                          type: string
+                        slug:
+                          type: string
+                        name:
+                          type: string
+                        name_en:
+                          type: string
+                        faction_zh:
+                          type: string
+                        first_appearance:
+                          type: string
+                        first_appearance_label:
+                          type: string
+                        bby_aby_label:
+                          type: string
+                  total:
+                    type: integer
+                  limit:
+                    type: integer
+                  offset:
+                    type: integer
+
+  /characters/{slug}:
     get:
       summary: 人物详情（含编年史）
       parameters:
         - in: path
           name: slug
           required: true
-          schema: { type: string }
-        - in: query
-          name: locale
-          required: true
-          schema: { type: string, enum: [zh-CN, en-US] }
+          schema:
+            type: string
+          example: luke-skywalker
+        - $ref: '#/common/parameters/locale'
       responses:
-        '200': { description: ok }
-  /api/v1/graph/subgraph:
+        '200':
+          description: Character detail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  locale:
+                    type: string
+                  character:
+                    type: object
+                    properties:
+                      canonical_id:
+                        type: string
+                        example: char_luke
+                      slug:
+                        type: string
+                      name:
+                        type: string
+                        example: 卢克·天行者
+                      name_en:
+                        type: string
+                        example: Luke Skywalker
+                      aliases_zh:
+                        type: array
+                        items:
+                          type: string
+                      aliases_en:
+                        type: array
+                        items:
+                          type: string
+                      species_zh:
+                        type: string
+                      species_en:
+                        type: string
+                      faction_zh:
+                        type: string
+                      faction_en:
+                        type: string
+                      first_appearance:
+                        type: string
+                      first_appearance_label:
+                        type: string
+                      bby_aby_birth:
+                        type: number
+                      bby_aby_label:
+                        type: string
+                        example: "19 BBY"
+                      is_beyond_films_entry:
+                        type: boolean
+                      origin_type:
+                        type: string
+                      bio_zh:
+                        type: string
+                      bio_en:
+                        type: string
+                      source_url:
+                        type: string
+                        format: uri
+                  display_name:
+                    type: string
+        '404':
+          description: Character not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /graph/subgraph:
     get:
       summary: 图谱子图
+      description: Returns subgraph centered on given entity with specified traversal depth
       parameters:
         - in: query
           name: entity_id
           required: true
-          schema: { type: string }
+          schema:
+            type: string
+          description: Starting node canonical_id
+          example: char_luke
         - in: query
           name: depth
-          schema: { type: integer, minimum: 1, maximum: 3, default: 1 }
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 3
+            default: 1
+          description: Traversal depth (1-3)
+        - in: query
+          name: types
+          required: false
+          schema:
+            type: string
+          description: Comma-separated entity types to include (character,film,faction,planet,event)
       responses:
-        '200': { description: ok }
+        '200':
+          description: Graph subgraph
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nodes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                          enum: [character, film, faction, planet, event]
+                        label_zh:
+                          type: string
+                        label_en:
+                          type: string
+                  edges:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        source:
+                          type: string
+                        target:
+                          type: string
+                        type:
+                          type: string
+                        label_zh:
+                          type: string
+                        label_en:
+                          type: string
+
+components:
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              enum: [INVALID_PARAMETER, NOT_FOUND, INTERNAL_ERROR]
+            message:
+              type: string
+              example: Film not found
+            detail:
+              type: string
+              example: No film with slug 'episode-x' exists
