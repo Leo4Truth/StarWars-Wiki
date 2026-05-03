@@ -1,0 +1,11 @@
+canonical_id,slug,title_en,title_zh,release_date,era,bby_aby_numeric,timeline_sort_key,source_url
+film_ep1,episode-i-the-phantom-menace,Star Wars: Episode I – The Phantom Menace,星球大战前传一：幽灵的威胁,1999-05-19,prequel,-32,-32.0000,https://en.wikipedia.org/wiki/List_of_Star_Wars_films
+film_ep2,episode-ii-attack-of-the-clones,Star Wars: Episode II – Attack of the Clones,星球大战前传二：克隆人的进攻,2002-05-16,prequel,-22,-22.0000,https://en.wikipedia.org/wiki/List_of_Star_Wars_films
+film_ep3,episode-iii-revenge-of-the-sith,Star Wars: Episode III – Revenge of the Sith,星球大战前传三：西斯的复仇,2005-05-19,prequel,-19,-19.0000,https://en.wikipedia.org/wiki/List_of_Star_Wars_films
+film_rogue_one,rogue-one,Rogue One: A Star Wars Story,侠盗一号：星球大战外传,2016-12-16,anthology,0,0.1000,https://en.wikipedia.org/wiki/List_of_Star_Wars_films
+film_ep4,episode-iv-a-new-hope,Star Wars,星球大战：新希望,1977-05-25,original,0,0.2000,https://en.wikipedia.org/wiki/List_of_Star_Wars_films
+film_ep5,episode-v-the-empire-strikes-back,The Empire Strikes Back,星球大战：帝国反击战,1980-05-21,original,3,3.0000,https://en.wikipedia.org/wiki/List_of_Star_Wars_films
+film_ep6,episode-vi-return-of-the-jedi,Return of the Jedi,星球大战：绝地归来,1983-05-25,original,4,4.0000,https://en.wikipedia.org/wiki/List_of_Star_Wars_films
+film_ep7,episode-vii-the-force-awakens,The Force Awakens,星球大战：原力觉醒,2015-12-18,sequel,34,34.0000,https://en.wikipedia.org/wiki/List_of_Star_Wars_films
+film_ep8,episode-viii-the-last-jedi,The Last Jedi,星球大战：最后的绝地武士,2017-12-15,sequel,34,34.1000,https://en.wikipedia.org/wiki/List_of_Star_Wars_films
+film_ep9,episode-ix-the-rise-of-skywalker,The Rise of Skywalker,星球大战：天行者崛起,2019-12-20,sequel,35,35.0000,https://en.wikipedia.org/wiki/List_of_Star_Wars_films

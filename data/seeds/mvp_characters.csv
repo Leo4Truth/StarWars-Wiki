@@ -1,0 +1,6 @@
+canonical_id,slug,name_en,name_zh,first_appearance,origin_type,bby_aby_birth,is_beyond_films_entry,source_url
+char_luke,luke-skywalker,Luke Skywalker,卢克·天行者,film_ep4,film,-19,0,https://starwars.fandom.com/wiki/Luke_Skywalker
+char_ahsoka,ahsoka-tano,Ahsoka Tano,阿索卡·塔诺,film_clone_wars_2008,animation,-36,1,https://www.starwars.com/news/who-is-ahsoka-tano
+char_mara,mara-jade,Mara Jade,玛拉·杰德,work_heir_to_the_empire,novel,,1,https://starwars.fandom.com/wiki/Mara_Jade_Skywalker
+char_revan,revan,Revan,瑞文,work_kotor,game,-3994,1,https://starwars.fandom.com/wiki/Revan
+char_aphra,doctor-aphra,Doctor Aphra,阿芙拉博士,work_darth_vader_2015,comic,,1,https://starwars.fandom.com/wiki/Chelli_Lona_Aphra
