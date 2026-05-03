@@ -20,3 +20,20 @@ MVP 开发冻结文档：
 - [设计稿到组件映射](docs/mvp/Design-to-Component-Mapping.md)
 - [最小种子数据（films）](data/seeds/mvp_films.csv)
 - [最小种子数据（characters）](data/seeds/mvp_characters.csv)
+
+## 开发启动（MVP）
+
+### Backend（FastAPI + uv）
+
+```bash
+cd backend
+uv run uvicorn app.main:app --reload --port 8000
+```
+
+### Frontend（Next.js）
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
