@@ -1,5 +1,16 @@
 # Decisions Log
 
+## 2026-05-03 — Static Assets and Placeholder System
+
+### Why programmatic SVG placeholders instead of real images
+Star Wars assets are copyright-protected. For MVP, we generate SVG placeholders with Star Wars theming (dark blue/gold color scheme, era badges, BBY/ABY labels). Real assets can be swapped in when licensing is resolved.
+
+### Why store placeholders in frontend/src/components/ui
+The AssetPlaceholder.tsx component generates dynamic placeholders with film titles, era badges, faction indicators. It uses Tailwind color scheme (starwars-blue, starwars-gold, etc.) from globals.css.
+
+### Why asset mapping in frontend/src/lib/assets.ts
+Centralizes asset path mapping and URL generation. Provides getFilmImageUrl, getCharacterImageUrl helpers that return local paths, with fallback to placeholder generation planned for future.
+
 ## 2026-05-03 — Harness Engineering Foundation
 
 ### Why Python type annotations are `dict[str, Any]` not `dict`

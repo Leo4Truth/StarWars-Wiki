@@ -14,6 +14,9 @@
 - `src/app/[locale]/films/[slug]/page.tsx` — Film detail page
 - `src/app/page.tsx` — Redirects `/` to `/zh-CN`
 - `src/lib/api.ts` — API client (getFilmTimeline, getFilmDetail, getCharacterDetail)
+- `src/lib/assets.ts` — Asset mapping and URL helpers
+- `src/components/ui/AssetPlaceholder.tsx` — SVG placeholder generator component
+- `frontend/public/assets/` — Directory structure for films, characters, beyond-films
 - `jest.config.js`, `jest.setup.js` — Jest test infrastructure
 - **No i18n library yet** — locale routing exists but UI strings are hardcoded
 
@@ -41,6 +44,7 @@
 - **E2E tests** — only unit/integration tests exist
 - **Conventional commits enforcement** — not enforced by CI yet
 - **Release Drafter** — auto-changelog not set up
+- **Real assets** — film posters, character portraits not collected (copyright issues); SVG placeholders used for MVP
 
 ## API Contract
 
