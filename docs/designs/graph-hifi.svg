@@ -1,0 +1,27 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#060b18"/>
+  <rect x="20" y="20" width="1560" height="70" rx="14" fill="#0b1324" stroke="#3BA8FF"/>
+  <text x="50" y="64" fill="#F5C451" font-size="30" font-family="Arial" font-weight="700">Knowledge Graph Explorer</text>
+  <text x="420" y="63" fill="#d2e1ff" font-size="18" font-family="Arial">Search · Era Filter · Relation Filter · Layout</text>
+  <rect x="20" y="110" width="1160" height="770" rx="20" fill="#0c1528" stroke="#3BA8FF"/>
+  <rect x="1200" y="110" width="380" height="770" rx="20" fill="#0f1728" stroke="#3BA8FF"/>
+  <line x1="260" y1="300" x2="500" y2="260" stroke="#6f8bbd" stroke-width="3"/>
+  <line x1="260" y1="300" x2="430" y2="470" stroke="#6f8bbd" stroke-width="3"/>
+  <line x1="430" y1="470" x2="700" y2="420" stroke="#6f8bbd" stroke-width="3"/>
+  <line x1="430" y1="470" x2="870" y2="300" stroke="#6f8bbd" stroke-width="3"/>
+  <line x1="430" y1="470" x2="690" y2="620" stroke="#6f8bbd" stroke-width="3"/>
+  <circle cx="260" cy="300" r="42" fill="#13233f" stroke="#ff7a7a" stroke-width="4"/><text x="225" y="362" fill="#eaf1ff" font-size="20" font-family="Arial">Anakin</text>
+  <circle cx="500" cy="260" r="42" fill="#13233f" stroke="#7fc7ff" stroke-width="4"/><text x="452" y="322" fill="#eaf1ff" font-size="20" font-family="Arial">Obi-Wan</text>
+  <circle cx="430" cy="470" r="48" fill="#13233f" stroke="#ff3b3b" stroke-width="5"/><text x="390" y="536" fill="#eaf1ff" font-size="22" font-family="Arial">Vader</text>
+  <circle cx="700" cy="420" r="40" fill="#13233f" stroke="#F5C451" stroke-width="4"/><text x="666" y="482" fill="#eaf1ff" font-size="20" font-family="Arial">EP III</text>
+  <circle cx="870" cy="300" r="46" fill="#13233f" stroke="#ff9f43" stroke-width="4"/><text x="809" y="366" fill="#eaf1ff" font-size="20" font-family="Arial">Palpatine</text>
+  <circle cx="690" cy="620" r="42" fill="#13233f" stroke="#c6d4ff" stroke-width="4"/><text x="640" y="684" fill="#eaf1ff" font-size="20" font-family="Arial">Death Star</text>
+  <text x="1230" y="160" fill="#F5C451" font-size="28" font-family="Arial">节点详情</text>
+  <text x="1230" y="220" fill="#e3edff" font-size="22" font-family="Arial">Name: Darth Vader</text>
+  <text x="1230" y="258" fill="#c8d9ff" font-size="20" font-family="Arial">Type: Character</text>
+  <text x="1230" y="296" fill="#c8d9ff" font-size="20" font-family="Arial">Faction: Galactic Empire</text>
+  <text x="1230" y="352" fill="#F5C451" font-size="22" font-family="Arial">Links</text>
+  <text x="1230" y="390" fill="#dbe8ff" font-size="20" font-family="Arial">• Appears in EP III</text>
+  <text x="1230" y="426" fill="#dbe8ff" font-size="20" font-family="Arial">• Father of Luke Skywalker</text>
+  <text x="1230" y="462" fill="#dbe8ff" font-size="20" font-family="Arial">• Apprentice of Palpatine</text>
+</svg>

@@ -1,0 +1,24 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#070d1b"/>
+  <rect x="30" y="24" width="1540" height="60" rx="12" fill="#0b1324" stroke="#3BA8FF"/>
+  <text x="58" y="63" fill="#F5C451" font-size="28" font-family="Arial" font-weight="700">Character Chronicle - Darth Vader</text>
+  <rect x="40" y="104" width="300" height="760" rx="20" fill="#101a2d" stroke="#3BA8FF"/>
+  <rect x="360" y="104" width="760" height="760" rx="20" fill="#0d182b" stroke="#3BA8FF"/>
+  <rect x="1140" y="104" width="420" height="760" rx="20" fill="#101a2d" stroke="#3BA8FF"/>
+  <text x="72" y="152" fill="#F5C451" font-size="26" font-family="Arial">人物档案</text>
+  <circle cx="190" cy="260" r="86" fill="#17253f" stroke="#7fc7ff" stroke-width="4"/>
+  <text x="106" y="385" fill="#e7efff" font-size="25" font-family="Arial">达斯·维达</text>
+  <text x="112" y="418" fill="#bcd0ff" font-size="20" font-family="Arial">Darth Vader</text>
+  <text x="390" y="152" fill="#F5C451" font-size="30" font-family="Arial">编年史时间线</text>
+  <line x1="430" y1="210" x2="430" y2="760" stroke="#5fa8ff" stroke-width="4"/>
+  <circle cx="430" cy="230" r="10" fill="#F5C451"/><circle cx="430" cy="360" r="10" fill="#F5C451"/><circle cx="430" cy="490" r="10" fill="#F5C451"/><circle cx="430" cy="620" r="10" fill="#F5C451"/>
+  <rect x="460" y="200" width="620" height="64" rx="12" fill="#13233f" stroke="#3BA8FF"/>
+  <rect x="460" y="330" width="620" height="64" rx="12" fill="#13233f" stroke="#3BA8FF"/>
+  <rect x="460" y="460" width="620" height="64" rx="12" fill="#13233f" stroke="#3BA8FF"/>
+  <rect x="460" y="590" width="620" height="64" rx="12" fill="#13233f" stroke="#3BA8FF"/>
+  <text x="484" y="240" fill="#eaf1ff" font-size="22" font-family="Arial">41 BBY · Anakin born on Tatooine</text>
+  <text x="484" y="370" fill="#eaf1ff" font-size="22" font-family="Arial">22 BBY · Falls to the dark side</text>
+  <text x="484" y="500" fill="#eaf1ff" font-size="22" font-family="Arial">0 BBY · Empire reigns across galaxy</text>
+  <text x="484" y="630" fill="#eaf1ff" font-size="22" font-family="Arial">4 ABY · Redemption at Endor</text>
+  <text x="1174" y="152" fill="#F5C451" font-size="30" font-family="Arial">关系网络</text>
+</svg>
