@@ -36,8 +36,6 @@ def _format_film_item(film: dict[str, Any], locale: str) -> dict[str, Any]:
     """Format a film item for film-timeline response."""
     bby_aby_numeric = int(float(film.get("bby_aby_numeric", 0)))
     title = film["title_zh"] if locale == "zh-CN" else film["title_en"]
-    synopsis = film.get("synopsis_zh") if locale == "zh-CN" else film.get("synopsis_en")
-    director = film.get("director_zh") if locale == "zh-CN" else film.get("director_en")
     hover_summary = film.get("hover_summary") or build_hover_summary(film)
 
     return {
@@ -265,11 +263,210 @@ def character_detail(slug: str, locale: str = Query(...)) -> dict[str, Any]:
     raise HTTPException(status_code=404, detail="character not found")
 
 
+# Faction definitions for graph relationships
+FACTIONS: dict[str, dict[str, str]] = {
+    "银河帝国": {
+        "id": "faction_empire",
+        "type": "faction",
+        "label_zh": "银河帝国",
+        "label_en": "Galactic Empire",
+    },
+    "义军同盟": {
+        "id": "faction_rebel",
+        "type": "faction",
+        "label_zh": "义军同盟",
+        "label_en": "Rebel Alliance",
+    },
+    "抵抗组织": {
+        "id": "faction_resistance",
+        "type": "faction",
+        "label_zh": "抵抗组织",
+        "label_en": "Resistance",
+    },
+    "第一军团": {
+        "id": "faction_first_order",
+        "type": "faction",
+        "label_zh": "第一军团",
+        "label_en": "First Order",
+    },
+    "绝地武士团": {
+        "id": "faction_jedi",
+        "type": "faction",
+        "label_zh": "绝地武士团",
+        "label_en": "Jedi Order",
+    },
+    "西斯": {
+        "id": "faction_sith",
+        "type": "faction",
+        "label_zh": "西斯",
+        "label_en": "Sith",
+    },
+    "独立星系联邦": {
+        "id": "faction_cis",
+        "type": "faction",
+        "label_zh": "独立星系联邦",
+        "label_en": "Confederacy of Independent Systems",
+    },
+}
+
+
+def _add_graph_node(
+    nodes: list[dict[str, Any]],
+    seen_nodes: set[str],
+    canonical_id: str,
+    node_type: str,
+    label_zh: str = "",
+    label_en: str = "",
+) -> None:
+    """Add a node to the graph if not already present."""
+    if canonical_id in seen_nodes:
+        return
+    seen_nodes.add(canonical_id)
+    nodes.append({
+        "id": canonical_id,
+        "type": node_type,
+        "label_zh": label_zh,
+        "label_en": label_en,
+    })
+
+
+def _add_graph_edge(
+    edges: list[dict[str, Any]],
+    seen_edges: set[str],
+    source: str,
+    target: str,
+    edge_type: str,
+    label_zh: str = "",
+    label_en: str = "",
+) -> None:
+    """Add an edge to the graph if not already present."""
+    edge_key = f"{source}-{target}-{edge_type}"
+    if edge_key in seen_edges:
+        return
+    seen_edges.add(edge_key)
+    edges.append({
+        "source": source,
+        "target": target,
+        "type": edge_type,
+        "label_zh": label_zh,
+        "label_en": label_en,
+    })
+
+
 @router.get("/graph/subgraph")
-def subgraph(entity_id: str, depth: int = 1) -> dict[str, Any]:
+def subgraph(entity_id: str, depth: int = 1, locale: str = Query(default="en-US")) -> dict[str, Any]:
+    """Get subgraph centered on an entity with specified depth."""
+    nodes: list[dict[str, Any]] = []
+    edges: list[dict[str, Any]] = []
+    seen_nodes: set[str] = set()
+    seen_edges: set[str] = set()
+
+    films = {f["canonical_id"]: f for f in load_csv("mvp_films.csv")}
+    characters = {c["canonical_id"]: c for c in load_csv("mvp_characters.csv")}
+
+    def explore_entity(eid: str, current_depth: int) -> None:
+        if current_depth > depth:
+            return
+
+        # Determine entity type and add it
+        if eid in characters:
+            _add_graph_node(
+                nodes, seen_nodes, eid, "character",
+                characters[eid]["name_zh"], characters[eid]["name_en"]
+            )
+            char = characters[eid]
+
+            # Character -> Film (appears_in via first_appearance)
+            first_app = char.get("first_appearance", "")
+            if first_app and first_app in films:
+                _add_graph_node(
+                    nodes, seen_nodes, first_app, "film",
+                    films[first_app]["title_zh"], films[first_app]["title_en"]
+                )
+                first_title_zh = films[first_app]["title_zh"]
+                first_title_en = films[first_app]["title_en"]
+                if locale == "zh-CN":
+                    edge_label = f"首次登场：{first_title_zh}"
+                else:
+                    edge_label = f"First appears in: {first_title_en}"
+                _add_graph_edge(
+                    edges, seen_edges, eid, first_app, "appears_in",
+                    edge_label, f"First appears in: {first_title_en}"
+                )
+                if current_depth < depth:
+                    explore_entity(first_app, current_depth + 1)
+
+            # Character -> Faction (belongs_to)
+            faction_zh = char.get("faction_zh", "")
+            if faction_zh and faction_zh in FACTIONS:
+                faction_data = FACTIONS[faction_zh]
+                _add_graph_node(
+                    nodes, seen_nodes, faction_data["id"], "faction",
+                    faction_data["label_zh"], faction_data["label_en"]
+                )
+                if locale == "zh-CN":
+                    edge_label = f"所属阵营：{faction_zh}"
+                else:
+                    edge_label = f"Belongs to: {faction_data['label_en']}"
+                _add_graph_edge(
+                    edges, seen_edges, eid, faction_data["id"], "belongs_to",
+                    edge_label, f"Belongs to: {faction_data['label_en']}"
+                )
+
+            # Hero characters in films - link characters in same film
+            for film_canonical_id, film in films.items():
+                hero_chars = film.get("hero_characters", "")
+                if eid in hero_chars.split(","):
+                    for other_char_slug in hero_chars.split(","):
+                        other_char_slug = other_char_slug.strip()
+                        if other_char_slug and other_char_slug in characters and other_char_slug != eid:
+                            _add_graph_node(
+                                nodes, seen_nodes, other_char_slug, "character",
+                                characters[other_char_slug]["name_zh"],
+                                characters[other_char_slug]["name_en"]
+                            )
+                            _add_graph_edge(
+                                edges, seen_edges, eid, other_char_slug, "co_appears_in",
+                                "共同登场", "Co-appears in film"
+                            )
+
+        elif eid in films:
+            _add_graph_node(
+                nodes, seen_nodes, eid, "film",
+                films[eid]["title_zh"], films[eid]["title_en"]
+            )
+            film = films[eid]
+
+            # Film -> Characters (appears_in via hero_characters)
+            hero_chars = film.get("hero_characters", "")
+            for char_slug in hero_chars.split(","):
+                char_slug = char_slug.strip()
+                if char_slug and char_slug in characters:
+                    _add_graph_node(
+                        nodes, seen_nodes, char_slug, "character",
+                        characters[char_slug]["name_zh"], characters[char_slug]["name_en"]
+                    )
+                    film_title_zh = film["title_zh"]
+                    film_title_en = film["title_en"]
+                    if locale == "zh-CN":
+                        edge_label = f"登场于：{film_title_zh}"
+                    else:
+                        edge_label = f"Appears in: {film_title_en}"
+                    _add_graph_edge(
+                        edges, seen_edges, char_slug, eid, "appears_in",
+                        edge_label, f"Appears in: {film_title_en}"
+                    )
+                    if current_depth < depth:
+                        explore_entity(char_slug, current_depth + 1)
+
+    # Build relationships for all characters and films
+    for char_canonical_id in characters:
+        explore_entity(char_canonical_id, 1)
+
     return {
         "entity_id": entity_id,
         "depth": depth,
-        "nodes": [{"id": entity_id, "type": "character"}],
-        "edges": [],
+        "locale": locale,
+        "nodes": nodes,
+        "edges": edges,
     }

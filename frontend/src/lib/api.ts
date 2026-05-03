@@ -69,3 +69,33 @@ export async function getCharacterDetail(slug: string, locale: string) {
   if (!res.ok) throw new Error('failed to fetch character detail');
   return res.json();
 }
+
+// Graph types
+export interface GraphNode {
+  id: string;
+  type: string;
+  label_zh: string;
+  label_en: string;
+}
+
+export interface GraphEdge {
+  source: string;
+  target: string;
+  type: string;
+  label_zh: string;
+  label_en: string;
+}
+
+export interface GraphSubgraphResponse {
+  entity_id: string;
+  depth: number;
+  locale: string;
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+}
+
+export async function getGraphSubgraph(entityId: string, depth: number, locale: string): Promise<GraphSubgraphResponse> {
+  const res = await fetch(`${API_BASE}/api/v1/graph/subgraph?entity_id=${encodeURIComponent(entityId)}&depth=${depth}&locale=${locale}`);
+  if (!res.ok) throw new Error('failed to fetch graph subgraph');
+  return res.json();
+}
