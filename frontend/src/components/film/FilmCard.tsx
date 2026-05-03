@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import type { FilmItem } from '@/lib/api';
+import { filmPosters } from '@/lib/assets';
 
 interface FilmCardProps {
   film: FilmItem;
@@ -23,20 +24,8 @@ const eraColors: Record<string, string> = {
   anthology: 'bg-emerald-600',
 };
 
-// Star Wars movie poster URLs (using placeholder with thematic gradients as fallback)
-const filmPosters: Record<string, string> = {
-  'phantom-menace': 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&h=600&fit=crop',
-  'attack-clones': 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&h=600&fit=crop',
-  'revenge-sith': 'https://images.unsplash.com/photo-1446329813274-7c9036bd9a1f?w=400&h=600&fit=crop',
-  'new-hope': 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=600&fit=crop',
-  'empire-strikes': 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400&h=600&fit=crop',
-  'return-jedi': 'https://images.unsplash.com/photo-1545158535-c3f7168c28b6?w=400&h=600&fit=crop',
-  'force-awakens': 'https://images.unsplash.com/photo-1509347528160-1f18f9578e26?w=400&h=600&fit=crop',
-  'last-jedi': 'https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=400&h=600&fit=crop',
-  'rise-skywalker': 'https://images.unsplash.com/photo-1517816428104-797678c7cf0c?w=400&h=600&fit=crop',
-  'rogue-one': 'https://images.unsplash.com/photo-1535696968503-e82e3c2a7e91?w=400&h=600&fit=crop',
-  'solo': 'https://images.unsplash.com/photo-1509914398892-963f53e6e2f1?w=400&h=600&fit=crop',
-};
+// Star Wars movie poster URLs - using imported filmPosters from @/lib/assets
+// Fallback gradients are used when local poster is not available
 
 export default function FilmCard({ film, locale }: FilmCardProps) {
   const [isHovered, setIsHovered] = useState(false);
