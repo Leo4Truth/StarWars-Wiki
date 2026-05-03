@@ -193,3 +193,29 @@ uv add --dev ruff mypy pytest pytest-asyncio httpx
 - 引入 `canon_policy` 字段：`canon / legends / mixed`。
 - 导入管线采用版本化 schema（JSON Schema + migration）。
 - 新内容更新流程：采集 -> 清洗 -> 人工审核 -> 发布 -> 图谱增量构建。
+
+## 11. 首页电影时间线与非电影人物入口技术设计（新增）
+
+### 11.1 新增 API
+
+- `GET /api/v1/home/film-timeline?locale=&era=`
+  - 返回按时间线排序的电影节点（含 hover 预览字段）。
+- `GET /api/v1/home/beyond-films?locale=&type=`
+  - 返回电影外故事角色入口（novel/comic/animation/game）。
+
+### 11.2 数据字段建议
+
+- FilmTimelineNode:
+  - `film_id`, `slug`, `title`, `era`, `timeline_order`, `bby_aby_label`, `hero_characters[]`, `hover_summary`
+- BeyondFilmEntry:
+  - `entity_id`, `name`, `origin_work_type`, `origin_work_title`, `timeline_anchor`, `movie_linkage`, `detail_url`
+
+### 11.3 前端实现要点
+
+- 首页新增 `FilmTimelineRail` 组件：
+  - 支持 hover 展开预览卡
+  - 支持点击路由跳转
+- 首页新增 `BeyondFilmsCarousel` 组件：
+  - 横向滚动 + 键盘可访问
+- 预取策略：
+  - 节点 hover 时触发 `prefetch` 电影详情，降低点击后延迟。

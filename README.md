@@ -12,3 +12,11 @@
 - [Home 高保真稿](docs/designs/home-hifi.svg)
 - [Character Chronicle 高保真稿](docs/designs/character-hifi.svg)
 - [Knowledge Graph 高保真稿](docs/designs/graph-hifi.svg)
+
+MVP 开发冻结文档：
+
+- [MVP 数据字典 v1（MySQL + Neo4j + Redis）](docs/mvp/MVP-Data-Dictionary-v1.md)
+- [MVP OpenAPI 合同](docs/mvp/openapi-mvp.yaml)
+- [设计稿到组件映射](docs/mvp/Design-to-Component-Mapping.md)
+- [最小种子数据（films）](data/seeds/mvp_films.csv)
+- [最小种子数据（characters）](data/seeds/mvp_characters.csv)
