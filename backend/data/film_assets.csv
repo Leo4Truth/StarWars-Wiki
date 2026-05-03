@@ -1,0 +1,11 @@
+film_canonical_id,poster_url,backdrop_url,thumbnail_url,logo_url,gallery_urls
+film_ep1,https://placehold.co/400x600/1a1a2e/ffd700?text=EPI,https://placehold.co/1200x600/1a1a2e/ffd700?text=EPI+Backdrop,https://placehold.co/200x300/1a1a2e/ffd700?text=EPI,,film_ep1_gal1.jpg|film_ep1_gal2.jpg
+film_ep2,https://placehold.co/400x600/1a1a2e/ffd700?text=EPII,https://placehold.co/1200x600/1a1a2e/ffd700?text=EPII+Backdrop,https://placehold.co/200x300/1a1a2e/ffd700?text=EPII,,film_ep2_gal1.jpg|film_ep2_gal2.jpg
+film_ep3,https://placehold.co/400x600/1a1a2e/ffd700?text=EPIII,https://placehold.co/1200x600/1a1a2e/ffd700?text=EPIII+Backdrop,https://placehold.co/200x300/1a1a2e/ffd700?text=EPIII,,film_ep3_gal1.jpg|film_ep3_gal2.jpg
+film_rogue_one,https://placehold.co/400x600/1a1a2e/ffd700?text=Rogue+One,https://placehold.co/1200x600/1a1a2e/ffd700?text=Rogue+One+Backdrop,https://placehold.co/200x300/1a1a2e/ffd700?text=Rogue+One,,film_rogue_one_gal1.jpg|film_rogue_one_gal2.jpg
+film_ep4,https://placehold.co/400x600/1a1a2e/ffd700?text=EPIV,https://placehold.co/1200x600/1a1a2e/ffd700?text=EPIV+Backdrop,https://placehold.co/200x300/1a1a2e/ffd700?text=EPIV,,film_ep4_gal1.jpg|film_ep4_gal2.jpg
+film_ep5,https://placehold.co/400x600/1a1a2e/ffd700?text=EPV,https://placehold.co/1200x600/1a1a2e/ffd700?text=EPV+Backdrop,https://placehold.co/200x300/1a1a2e/ffd700?text=EPV,,film_ep5_gal1.jpg|film_ep5_gal2.jpg
+film_ep6,https://placehold.co/400x600/1a1a2e/ffd700?text=EPVI,https://placehold.co/1200x600/1a1a2e/ffd700?text=EPVI+Backdrop,https://placehold.co/200x300/1a1a2e/ffd700?text=EPVI,,film_ep6_gal1.jpg|film_ep6_gal2.jpg
+film_ep7,https://placehold.co/400x600/1a1a2e/ffd700?text=EPVII,https://placehold.co/1200x600/1a1a2e/ffd700?text=EPVII+Backdrop,https://placehold.co/200x300/1a1a2e/ffd700?text=EPVII,,film_ep7_gal1.jpg|film_ep7_gal2.jpg
+film_ep8,https://placehold.co/400x600/1a1a2e/ffd700?text=EPVIII,https://placehold.co/1200x600/1a1a2e/ffd700?text=EPVIII+Backdrop,https://placehold.co/200x300/1a1a2e/ffd700?text=EPVIII,,film_ep8_gal1.jpg|film_ep8_gal2.jpg
+film_ep9,https://placehold.co/400x600/1a1a2e/ffd700?text=EPIX,https://placehold.co/1200x600/1a1a2e/ffd700?text=EPIX+Backdrop,https://placehold.co/200x300/1a1a2e/ffd700?text=EPIX,,film_ep9_gal1.jpg|film_ep9_gal2.jpg

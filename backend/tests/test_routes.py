@@ -129,3 +129,82 @@ async def test_graph_subgraph():
     assert data["depth"] == 1
     assert "nodes" in data
     assert "edges" in data
+
+
+@pytest.mark.anyio
+async def test_film_assets():
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        response = await ac.get("/api/v1/assets/films/film_ep4")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["canonical_id"] == "film_ep4"
+    assert data["poster_url"] is not None
+    assert data["backdrop_url"] is not None
+    assert data["thumbnail_url"] is not None
+
+
+@pytest.mark.anyio
+async def test_film_assets_not_found():
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        response = await ac.get("/api/v1/assets/films/nonexistent")
+    assert response.status_code == 404
+
+
+@pytest.mark.anyio
+async def test_character_assets():
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        response = await ac.get("/api/v1/assets/characters/char_luke")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["canonical_id"] == "char_luke"
+    assert data["portrait_url"] is not None
+    assert data["action_shot_url"] is not None
+    assert data["symbol_url"] is not None
+
+
+@pytest.mark.anyio
+async def test_character_assets_not_found():
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        response = await ac.get("/api/v1/assets/characters/nonexistent")
+    assert response.status_code == 404
+
+
+@pytest.mark.anyio
+async def test_beyond_film_assets():
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        response = await ac.get("/api/v1/assets/beyond-films/char_ahsoka")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["canonical_id"] == "char_ahsoka"
+    assert data["poster_url"] is not None
+    assert data["artwork_url"] is not None
+
+
+@pytest.mark.anyio
+async def test_beyond_film_assets_not_found():
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        response = await ac.get("/api/v1/assets/beyond-films/nonexistent")
+    assert response.status_code == 404
+
+
+@pytest.mark.anyio
+async def test_film_timeline_includes_assets():
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        response = await ac.get("/api/v1/home/film-timeline", params={"locale": "zh-CN"})
+    assert response.status_code == 200
+    data = response.json()
+    for item in data["items"]:
+        assert "poster_url" in item
+        assert "backdrop_url" in item
+        assert "thumbnail_url" in item
+
+
+@pytest.mark.anyio
+async def test_beyond_films_includes_assets():
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        response = await ac.get("/api/v1/home/beyond-films", params={"locale": "zh-CN"})
+    assert response.status_code == 200
+    data = response.json()
+    for item in data["items"]:
+        assert "poster_url" in item
+        assert "artwork_url" in item

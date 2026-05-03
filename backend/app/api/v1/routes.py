@@ -6,6 +6,7 @@ from fastapi import APIRouter, HTTPException, Query
 
 from app.core.seed_loader import load_csv
 from app.core.formatters import format_bby_aby_label, build_hover_summary
+from app.core.asset_formatter import get_film_assets, get_character_assets, get_beyond_film_assets
 
 router = APIRouter()
 
@@ -40,6 +41,9 @@ def _format_film_item(film: dict[str, Any], locale: str) -> dict[str, Any]:
     director = film.get("director_zh") if locale == "zh-CN" else film.get("director_en")
     hover_summary = film.get("hover_summary") or build_hover_summary(film)
 
+    # Get film assets
+    assets = get_film_assets(film["canonical_id"])
+
     return {
         "canonical_id": film["canonical_id"],
         "slug": film["slug"],
@@ -56,6 +60,10 @@ def _format_film_item(film: dict[str, Any], locale: str) -> dict[str, Any]:
         "director_en": film.get("director_en"),
         "hero_characters": _build_hero_characters(film.get("hero_characters"), locale),
         "hover_summary": hover_summary,
+        # Asset fields
+        "poster_url": assets.get("poster_url"),
+        "backdrop_url": assets.get("backdrop_url"),
+        "thumbnail_url": assets.get("thumbnail_url"),
     }
 
 
@@ -127,6 +135,9 @@ def home_beyond_films(locale: str = Query(...), type: str = "all") -> dict[str, 
             "movie_linkage_label": movie_linkage_label,
             "bio_summary": bio_summary,
             "detail_url": detail_url,
+            # Asset fields
+            "poster_url": get_beyond_film_assets(char["canonical_id"]).get("poster_url"),
+            "artwork_url": get_beyond_film_assets(char["canonical_id"]).get("artwork_url"),
         })
 
     return {"locale": locale, "items": formatted_items}
@@ -263,6 +274,33 @@ def character_detail(slug: str, locale: str = Query(...)) -> dict[str, Any]:
                 "display_name": name,
             }
     raise HTTPException(status_code=404, detail="character not found")
+
+
+@router.get("/assets/films/{canonical_id}")
+def film_assets(canonical_id: str) -> dict[str, Any]:
+    """Get all asset URLs for a film."""
+    assets = get_film_assets(canonical_id)
+    if not assets.get("poster_url"):
+        raise HTTPException(status_code=404, detail="film assets not found")
+    return {"canonical_id": canonical_id, **assets}
+
+
+@router.get("/assets/characters/{canonical_id}")
+def character_assets(canonical_id: str) -> dict[str, Any]:
+    """Get all asset URLs for a character."""
+    assets = get_character_assets(canonical_id)
+    if not assets.get("portrait_url"):
+        raise HTTPException(status_code=404, detail="character assets not found")
+    return {"canonical_id": canonical_id, **assets}
+
+
+@router.get("/assets/beyond-films/{canonical_id}")
+def beyond_film_assets(canonical_id: str) -> dict[str, Any]:
+    """Get all asset URLs for a beyond-film entry."""
+    assets = get_beyond_film_assets(canonical_id)
+    if not assets.get("poster_url"):
+        raise HTTPException(status_code=404, detail="beyond-film assets not found")
+    return {"canonical_id": canonical_id, **assets}
 
 
 @router.get("/graph/subgraph")
