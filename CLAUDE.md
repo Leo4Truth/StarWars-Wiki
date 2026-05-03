@@ -46,6 +46,60 @@ npm test             # Jest tests
 - `era` filter values: `prequel`, `original`, `sequel`, `anthology`, `all`.
 - `locale` enum: `zh-CN`, `en-US`.
 
+## CI/CD Validation Protocol
+
+**Every code change must pass CI checks locally before committing.** The GitHub Actions workflow runs the same commands, so validating locally catches failures before they reach CI.
+
+### Pre-commit Checklist
+
+Run these commands **before every commit** (excluding trivial changes like docs/comments):
+
+#### Backend
+```bash
+cd backend
+uv run --with ruff ruff check .                          # lint
+uv run --with mypy mypy app/ --explicit-package-bases   # type check
+uv run --with pytest --with httpx --with pytest-asyncio pytest tests/ -v  # tests
+```
+
+#### Frontend
+```bash
+cd frontend
+npm run lint                                             # ESLint
+npx tsc --noEmit                                        # TypeScript (must pass)
+npm test                                                # Jest tests
+```
+
+#### Commit & Push
+```bash
+git add <changed files>
+git commit -m "$(cat <<'EOF'
+<conventional commit message>
+EOF
+)"
+git push
+```
+
+### Why validate locally first
+
+- GitHub Actions cannot be run locally in full, but the commands are identical
+- CI feedback loop is slow (~2-5 min per run); local checks are instant
+- Catching failures locally prevents noisy CI red builds on the shared branch
+- Some errors (mypy module resolution, TypeScript deprecations) are environment-specific — local validation surfaces them
+
+### CI Pipeline Structure
+
+The `.github/workflows/ci.yml` runs:
+
+| Stage | Backend | Frontend |
+|-------|---------|----------|
+| Install | `uv sync --dev` | `npm ci` |
+| Lint | `ruff check .` | `npm run lint` |
+| Type check | `mypy app/ --explicit-package-bases` | `tsc --noEmit` |
+| Tests | `pytest tests/ -v` | `npm test` |
+
+If any stage fails, the pipeline stops. All stages must green before merging to main.
+
 ## Agent Change Protocol
 
 When making a change, follow this sequence:
@@ -53,9 +107,10 @@ When making a change, follow this sequence:
 1. **Test-first**: Write a failing test that captures the expected behavior
 2. **Run full test suite**: All tests must pass before committing
 3. **Lint clean**: `ruff check .` and `npm run lint` pass
-4. **Update memory files**: Log the decision in `.claude/memory/decisions.md`, update `.claude/memory/project-state.md`
-5. **Update docs**: If behavior changed, update relevant docs
-6. **Conventional commits**: Use `feat:`, `fix:`, `docs:`, `test:`, `refactor:`, `chore:`
+4. **Type check clean**: `mypy app/ --explicit-package-bases` and `npx tsc --noEmit` pass
+5. **Update memory files**: Log the decision in `.claude/memory/decisions.md`, update `.claude/memory/project-state.md`
+6. **Update docs**: If behavior changed, update relevant docs
+7. **Conventional commits**: Use `feat:`, `fix:`, `docs:`, `test:`, `refactor:`, `chore:`
 
 ## Key Files
 
