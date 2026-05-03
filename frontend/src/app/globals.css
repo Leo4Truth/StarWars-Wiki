@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --starwars-black: #0a0a0f;
+  --starwars-blue: #0d1b2a;
+  --starwars-gold: #ffd700;
+  --starwars-yellow: #f0c000;
+}
+
+body {
+  background-color: var(--starwars-black);
+  color: #f0f0f0;
+}
+
+html {
+  background-color: var(--starwars-black);
+}
+
+/* Custom scrollbar for star wars theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--starwars-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--starwars-gold);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--starwars-yellow);
+}
